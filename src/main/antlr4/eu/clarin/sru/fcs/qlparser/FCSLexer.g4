@@ -28,6 +28,7 @@ R_SQUARE_BRACKET: ']';
 OR: '|';
 AND: '&';
 NOT: '!';
+FWD_SLASH: '/';
 
 OPERATOR
     : '='
@@ -43,15 +44,11 @@ QUANTIFIER
     | '{' INTEGER ',' INTEGER? '}'  /* min-max */
     ;   
 
-FLAGGED_REGEXP
-    : REGEXP '/' REGEXP_FLAG+
-    ;
-
 REGEXP
     : QUOTED_STRING
     ;
 
-fragment REGEXP_FLAG
+REGEXP_FLAG
     : 'i'  /* case-insensitive; Poliqarp/Perl compat */
     | 'I'  /* case-sensitive; Poliqarp compat */
     | 'c'  /* case-insensitive, CQP compat */

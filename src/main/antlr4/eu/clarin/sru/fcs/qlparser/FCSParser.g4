@@ -93,5 +93,5 @@ attribute
 
 flagged_regexp
     : REGEXP         # regexp
-    | FLAGGED_REGEXP # flaggedRegexp 
+    | REGEXP FWD_SLASH REGEXP_FLAG+ # flaggedRegexp 
     ;
