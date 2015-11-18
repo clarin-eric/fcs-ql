@@ -4,7 +4,7 @@
   <groupId>eu.clarin.sru.fcs</groupId>
   <artifactId>fcs-ql</artifactId>
   <version>0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
   <name>fcs-ql</name>
   <properties>
     <antlr.version>4.5.1-1</antlr.version>
