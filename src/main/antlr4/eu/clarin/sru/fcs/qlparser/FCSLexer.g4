@@ -6,21 +6,6 @@ lexer grammar FCSLexer;
  * 20150501- /ljo 
  */
 
-SIMPLE_WITHIN_SCOPE
-    : 'sentence'
-    | 's'
-    | 'utterance'
-    | 'u'
-    | 'paragraph'
-    | 'p'
-    | 'turn'
-    | 't'
-    | 'text'
-    | 'session'
-    ;
-
-WITHIN: 'within';
-
 LPAREN: '(';
 RPAREN: ')';
 L_SQUARE_BRACKET: '[';
@@ -48,15 +33,6 @@ REGEXP
     : QUOTED_STRING
     ;
 
-REGEXP_FLAG
-    : 'i'  /* case-insensitive; Poliqarp/Perl compat */
-    | 'I'  /* case-sensitive; Poliqarp compat */
-    | 'c'  /* case-insensitive, CQP compat */
-    | 'C'  /* case-sensitive */
-    | 'l'  /* literal matching, CQP compat*/
-    | 'd'  /* diacritic agnostic matching, CQP compat */
-    ;
-
 SIMPLE_ATTRIBUTE
     : IDENTIFIER
     ;
@@ -78,6 +54,30 @@ fragment IDENTIFIER_CHAR
 
 INTEGER
     : [0-9+]
+    ;
+
+WITHIN: 'within';
+
+SIMPLE_WITHIN_SCOPE
+    : 'sentence'
+    | 's'
+    | 'utterance'
+    | 'u'
+    | 'paragraph'
+    | 'p'
+    | 'turn'
+    | 't'
+    | 'text'
+    | 'session'
+    ;
+
+REGEXP_FLAG
+    : 'i'  /* case-insensitive; Poliqarp/Perl compat */
+    | 'I'  /* case-sensitive; Poliqarp compat */
+    | 'c'  /* case-insensitive, CQP compat */
+    | 'C'  /* case-sensitive */
+    | 'l'  /* literal matching, CQP compat*/
+    | 'd'  /* diacritic agnostic matching, CQP compat */
     ;
 
 /* // doesnt work
