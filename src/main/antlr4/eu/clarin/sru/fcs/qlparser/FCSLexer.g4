@@ -6,39 +6,44 @@ lexer grammar FCSLexer;
  * 20150501- /ljo 
  */
 
-LPAREN: '(';
-RPAREN: ')';
+L_PAREN: '(';
+R_PAREN: ')';
 L_SQUARE_BRACKET: '[';
 R_SQUARE_BRACKET: ']';
 OR: '|';
 AND: '&';
 NOT: '!';
 FWD_SLASH: '/';
+L_CURLY_BRACKET: '{';
+R_CURLY_BRACKET: '}';
+Q_ONE_OR_MORE: '+';
+Q_ZERO_OR_MORE: '*';
+Q_ZERO_OR_ONE: '?';
+Q_COMMA: ',';
+OPERATOR_EQ: '=';
+OPERATOR_NE: '!=';
+COLON: ':';
 
-OPERATOR
-    : '='
-    | '!='
+REGEXP_FLAGS
+    : ( 'i'    /* case-insensitive; Poliqarp/Perl compat */
+      | 'I'    /* case-sensitive; Poliqarp compat */
+      | 'c'    /* case-insensitive, CQP compat */
+      | 'C'    /* case-sensitive */
+      | 'l'    /* literal matching, CQP compat*/
+      | 'd')+  /* diacritic agnostic matching, CQP compat */
     ;
-
-QUANTIFIER
-    : '+'                           /* one-or-more */
-    | '*'                           /* zero-or-more */
-    | '?'                           /* zero-or-one */
-    | '{' INTEGER '}'               /* exactly n-times */
-    | '{' INTEGER? ',' INTEGER '}'  /* at most */
-    | '{' INTEGER ',' INTEGER? '}'  /* min-max */
-    ;   
 
 REGEXP
     : QUOTED_STRING
     ;
 
-SIMPLE_ATTRIBUTE
-    : IDENTIFIER
-    ;
-QUALIFIED_ATTRIBUTE
-    :  IDENTIFIER ':' IDENTIFIER
-    ;
+//SIMPLE_ATTRIBUTE
+//    : IDENTIFIER
+//    ;
+
+//QUALIFIED_ATTRIBUTE
+//    :  IDENTIFIER ':' IDENTIFIER
+//    ;
 
 IDENTIFIER
     : IDENTIFIER_FIRST_CHAR IDENTIFIER_CHAR*
@@ -69,15 +74,6 @@ SIMPLE_WITHIN_SCOPE
     | 't'
     | 'text'
     | 'session'
-    ;
-
-REGEXP_FLAG
-    : 'i'  /* case-insensitive; Poliqarp/Perl compat */
-    | 'I'  /* case-sensitive; Poliqarp compat */
-    | 'c'  /* case-insensitive, CQP compat */
-    | 'C'  /* case-sensitive */
-    | 'l'  /* literal matching, CQP compat*/
-    | 'd'  /* diacritic agnostic matching, CQP compat */
     ;
 
 /* // doesnt work
@@ -128,4 +124,3 @@ fragment HEX
 Space
     : WS -> skip
     ;
-

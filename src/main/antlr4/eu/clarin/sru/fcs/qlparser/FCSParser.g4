@@ -5,7 +5,7 @@ options { tokenVocab=FCSLexer; }
  * 20150501- /ljo
  */ 
 query
-    : main_query within_part?
+    : main_query (WITHIN within_part)? EOF
     ;
 
 /* for debugging */
@@ -16,82 +16,113 @@ parse
      )*
   ;
 
-//main_query
-//    : simple_query 
-//    | main_query OR main_query     /* or */
-//    | main_query main_query         /* sequence */
-//    | main_query QUANTIFIER         /* quatification */ 
-//    ;
 
 main_query
-    : simple_query 
-    | simple_query OR main_query     /* or */
-    | simple_query main_query         /* sequence */
-    | simple_query QUANTIFIER         /* quatification */ 
+    : query_simple /* #simpleQuery */
+    | query_group /* #queryGroup */
+    | query_sequence /* #querySequence */
+    | query_disjunction /* #queryDisjunction */
     ;
 
-/*
-simple_query
-    : implicit_query
-    | segment_query 
-    ;
-*/
 
-simple_query
-    : LPAREN main_query RPAREN            /* grouping */
-    | implicit_query
-    | segment_query 
+query_disjunction
+    : (query_simple | query_sequence | query_group)
+            (OR (query_simple | query_sequence | query_group))+
     ;
 
-implicit_query
+
+query_sequence
+    : (query_simple | query_group)+
+    ;
+
+
+query_group
+    : L_PAREN (query_disjunction | query_sequence) R_PAREN quantifier?
+    ;
+
+
+query_simple
+    : (query_implicit | query_segment) quantifier?
+    ;
+
+
+quantifier
+    : (Q_ONE_OR_MORE | Q_ZERO_OR_MORE | Q_ZERO_OR_ONE |
+        ( L_CURLY_BRACKET
+            (INTEGER |
+             INTEGER? Q_COMMA INTEGER |
+             INTEGER Q_COMMA INTEGER?) R_CURLY_BRACKET))
+    ;
+
+
+query_implicit
     : flagged_regexp
     ;
 
-segment_query
+
+query_segment
     : L_SQUARE_BRACKET expression? R_SQUARE_BRACKET     /* [ expression? ] */
     ;
+
 
 within_part
     : simple_within_part
     ;
 
+
 simple_within_part
-    : WITHIN SIMPLE_WITHIN_SCOPE
+    : SIMPLE_WITHIN_SCOPE
     ;
 
-//expression
-//    : basic_expression          # basicExpression
-//    | expression OR expression  # orExpression /* or */
-//    | expression AND expression # andExpression /* and */
-//    | LPAREN expression RPAREN  # groupedExpression /* grouping */
-//    | NOT expression            # notExpression /* not */ 
-//    ;
 
 expression
-    : basic_expression          # basicExpression
-    | expression OR expression  # orExpression /* or */
-    | expression AND expression # andExpression /* and */
+    : expression_basic
+    | expression_not
+    | expression_group
+    | expression_or
+    | expression_and
     ;
 
-/*
-basic_expression
-    : attribute OPERATOR flagged_regexp
-    ;
-*/
 
-basic_expression
-    : LPAREN expression RPAREN  # groupedExpression /* grouping */
-    | NOT expression            # notExpression /* not */ 
-    | attribute OPERATOR flagged_regexp #basicAttrOpFlaggedRegex
+expression_or
+    : (expression_basic | expression_group | expression_not | expression_and) 
+        (OR (expression_basic | expression_group | expression_not | expression_and))+ 
+    ;    
+
+
+expression_and
+    : (expression_basic | expression_group | expression_not)
+        (AND (expression_basic | expression_group | expression_not))+ 
+    ;    
+
+
+
+expression_group
+    : L_PAREN (expression_basic | expression_not | expression_or | expression_and) R_PAREN
     ;
 
+
+expression_not
+    : NOT (expression_basic | expression_not | expression_or | expression_and)
+    ;
+
+
+expression_basic
+    : attribute (OPERATOR_EQ | OPERATOR_NE) flagged_regexp
+    ;
 
 attribute
-    : SIMPLE_ATTRIBUTE    # simpleAttribute
-    | QUALIFIED_ATTRIBUTE # qualifiedAttribute
+    : (qualifier COLON)? identifier
+    ; 
+
+qualifier
+    : (IDENTIFIER | WITHIN | SIMPLE_WITHIN_SCOPE | REGEXP_FLAGS)
+    ;
+
+identifier
+    : (IDENTIFIER | WITHIN | SIMPLE_WITHIN_SCOPE | REGEXP_FLAGS)
     ;
 
 flagged_regexp
-    : REGEXP         # regexp
-    | REGEXP FWD_SLASH REGEXP_FLAG+ # flaggedRegexp 
+    : REGEXP (FWD_SLASH REGEXP_FLAGS)? 
     ;
