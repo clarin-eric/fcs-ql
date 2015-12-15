@@ -3,25 +3,18 @@ options { tokenVocab=FCSLexer; }
 /* 
  * Parser for FCS Core FCS-QL version 2.0
  * 20150501- /ljo
- */ 
+ */
+
 query
     : main_query (WITHIN within_part)? EOF
     ;
 
-/* for debugging */
-parse
-  :  (t=.   
-          {System.out.printf("text: %-7s  type: %s \n",  
-           $t.text, tokenNames[$t.type]);}  
-     )*
-  ;
-
 
 main_query
-    : query_simple /* #simpleQuery */
-    | query_group /* #queryGroup */
-    | query_sequence /* #querySequence */
-    | query_disjunction /* #queryDisjunction */
+    : query_simple
+    | query_group
+    | query_sequence
+    | query_disjunction
     ;
 
 
@@ -56,7 +49,7 @@ quantifier
 
 
 query_implicit
-    : flagged_regexp
+    : regexp
     ;
 
 
@@ -66,11 +59,11 @@ query_segment
 
 
 within_part
-    : simple_within_part
+    : within_part_simple
     ;
 
 
-simple_within_part
+within_part_simple
     : SIMPLE_WITHIN_SCOPE
     ;
 
@@ -108,21 +101,35 @@ expression_not
 
 
 expression_basic
-    : attribute (OPERATOR_EQ | OPERATOR_NE) flagged_regexp
+    : attribute (OPERATOR_EQ | OPERATOR_NE) regexp
     ;
+
 
 attribute
     : (qualifier COLON)? identifier
     ; 
 
+
 qualifier
     : (IDENTIFIER | WITHIN | SIMPLE_WITHIN_SCOPE | REGEXP_FLAGS)
     ;
+
 
 identifier
     : (IDENTIFIER | WITHIN | SIMPLE_WITHIN_SCOPE | REGEXP_FLAGS)
     ;
 
-flagged_regexp
-    : REGEXP (FWD_SLASH REGEXP_FLAGS)? 
+
+regexp
+    : regexp_pattern (FWD_SLASH regexp_flag)?
+    ;
+
+
+regexp_pattern
+    : REGEXP
+    ;
+
+
+regexp_flag
+    : REGEXP_FLAGS
     ;

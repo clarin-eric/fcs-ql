@@ -23,45 +23,8 @@ Q_COMMA: ',';
 OPERATOR_EQ: '=';
 OPERATOR_NE: '!=';
 COLON: ':';
-
-REGEXP_FLAGS
-    : ( 'i'    /* case-insensitive; Poliqarp/Perl compat */
-      | 'I'    /* case-sensitive; Poliqarp compat */
-      | 'c'    /* case-insensitive, CQP compat */
-      | 'C'    /* case-sensitive */
-      | 'l'    /* literal matching, CQP compat*/
-      | 'd')+  /* diacritic agnostic matching, CQP compat */
-    ;
-
-REGEXP
-    : QUOTED_STRING
-    ;
-
-//SIMPLE_ATTRIBUTE
-//    : IDENTIFIER
-//    ;
-
-//QUALIFIED_ATTRIBUTE
-//    :  IDENTIFIER ':' IDENTIFIER
-//    ;
-
-IDENTIFIER
-    : IDENTIFIER_FIRST_CHAR IDENTIFIER_CHAR*
-    ;  
-
-fragment IDENTIFIER_FIRST_CHAR
-    : [a-zA-Z]
-    ;
-
-fragment IDENTIFIER_CHAR
-    : [a-zA-Z0-9\-]
-    ;
-
-INTEGER
-    : [0-9+]
-    ;
-
 WITHIN: 'within';
+
 
 SIMPLE_WITHIN_SCOPE
     : 'sentence'
@@ -76,6 +39,47 @@ SIMPLE_WITHIN_SCOPE
     | 'session'
     ;
 
+
+REGEXP_FLAGS
+    : ( 'i'    /* case-insensitive; Poliqarp/Perl compat */
+      | 'I'    /* case-sensitive; Poliqarp compat */
+      | 'c'    /* case-insensitive, CQP compat */
+      | 'C'    /* case-sensitive */
+      | 'l'    /* literal matching, CQP compat*/
+      | 'd')+  /* diacritic agnostic matching, CQP compat */
+    ;
+
+
+fragment IDENTIFIER_FIRST_CHAR
+    : [a-zA-Z]
+    ;
+
+
+fragment IDENTIFIER_LAST_CHAR
+    : [a-zA-Z0-9]
+    ;
+
+
+fragment IDENTIFIER_CHAR
+    : [a-zA-Z0-9\-]
+    ;
+
+
+IDENTIFIER
+    : IDENTIFIER_FIRST_CHAR (IDENTIFIER_CHAR* IDENTIFIER_LAST_CHAR)?
+    ;  
+
+
+INTEGER
+    : [0-9]+
+    ;
+
+
+REGEXP
+    : QUOTED_STRING
+    ;
+
+
 /* // doesnt work
 QUOTED_STRING
     : '\'' (CHAR | WS)*? '\''
@@ -83,10 +87,12 @@ QUOTED_STRING
     ;
 */
 
+
 QUOTED_STRING
     : '\'' (ESCAPED_CHAR | ~['\\])* '\''
     | '"' (ESCAPED_CHAR | ~["\\])* '"'
     ;
+
 
 fragment CHAR
     : ESCAPED_CHAR
@@ -97,12 +103,14 @@ fragment CHAR
         
     ;
 
+
 /* any unicode whitespace */
 fragment WS: '\u0009' | '\u000A' | '\u000B' | '\u000C' | '\u000D' | '\u0020' | '\u0085'
   | '\u00A0' | '\u1680' | '\u2000' | '\u2001' | '\u2002' | '\u2003' | '\u2004'
   | '\u2005' | '\u2006' | '\u2007' | '\u2008' | '\u2009' | '\u200A' | '\u2028'
   | '\u2029' | '\u202F' | '\u205F' | '\u3000' 
   ;
+
 
 fragment ESCAPED_CHAR
     : '\\'
@@ -117,9 +125,11 @@ fragment ESCAPED_CHAR
       )
     ;
 
+
 fragment HEX
     : [0-9a-fA-F]
     ;
+
 
 Space
     : WS -> skip
