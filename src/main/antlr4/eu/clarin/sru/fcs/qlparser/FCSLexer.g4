@@ -119,6 +119,17 @@ fragment ESCAPED_CHAR
         | '"'
         | 'n'
         | 't'
+        | '.'
+        | '^'
+        | '$'
+        | '*'
+        | '+'
+        | '?'
+        | '('
+        | ')'
+        | '{'
+        | '['
+        | '|'
         | 'x' HEX HEX
         | 'u' HEX HEX HEX HEX
         | 'U' HEX HEX HEX HEX HEX HEX HEX HEX
