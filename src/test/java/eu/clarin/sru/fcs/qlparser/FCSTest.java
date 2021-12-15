@@ -20,7 +20,7 @@ public class FCSTest {
         if (inputFile!=null) {
 	    is = new FileInputStream(inputFile);
 	}
-        ANTLRInputStream input = new ANTLRInputStream(is); 
+        CharStream input = CharStreams.fromStream(is);
         FCSLexer lexer = new FCSLexer(input); 
         CommonTokenStream tokens = new CommonTokenStream(lexer); 
         FCSParser parser = new FCSParser(tokens); 
