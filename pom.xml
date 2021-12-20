@@ -7,8 +7,8 @@
     <artifactId>fcs-ql</artifactId>
     <version>0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>fcs-ql</name>
-    <description>FCS Core 2.0 Query Language grammar parser.</description>
+    <name>CLARIN-FCS Core 2.0 query language parser</name>
+    <description>An implementation of CLARIN-FCS Core 2.0 query language grammar and parser.</description>
 
     <properties>
         <!-- project settings -->
