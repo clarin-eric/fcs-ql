@@ -175,4 +175,21 @@
             <url>https://nexus.clarin.eu/content/repositories/Clarin</url>
         </repository>
     </distributionManagement>
+
+    <reporting>
+        <!-- mvn site -->
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.9.0</version>
+            </plugin>
+            <!-- javadoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.11.2</version>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
