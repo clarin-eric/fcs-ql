@@ -7,9 +7,8 @@ import java.io.InputStream;
 
 /**
  * A test runner for queries in files or on STDIN.
- * 20150515 /ljo
  */
-public class FCSTest {
+public class LexTest {
     public static void main(String[] args) throws Exception {
         String inputFile = null; 
         if (args.length > 0) {
@@ -20,9 +19,9 @@ public class FCSTest {
             is = new FileInputStream(inputFile);
         }
         CharStream input = CharStreams.fromStream(is);
-        FCSLexer lexer = new FCSLexer(input); 
+        LexLexer lexer = new LexLexer(input); 
         CommonTokenStream tokens = new CommonTokenStream(lexer); 
-        FCSParser parser = new FCSParser(tokens); 
+        LexParser parser = new LexParser(tokens); 
         ParseTree tree = parser.query();
         System.out.println(tree.toStringTree(parser));
     }
