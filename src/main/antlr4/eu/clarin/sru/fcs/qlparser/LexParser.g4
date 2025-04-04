@@ -33,8 +33,6 @@ search_term: SIMPLE_STRING | QUOTED_STRING;
 
 /* indexes */
 
-index_modified: index modifier_list?;
-
 index: simple_name | prefix_name;
 
 /* relations */
