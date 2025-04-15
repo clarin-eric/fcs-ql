@@ -66,15 +66,17 @@
             <version>${antlr.version}</version>
         </dependency>
 
+        <!-- test -->
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
+            <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
+            <artifactId>slf4j-reload4j</artifactId>
             <version>${slf4j.version}</version>
             <scope>test</scope>
         </dependency>
