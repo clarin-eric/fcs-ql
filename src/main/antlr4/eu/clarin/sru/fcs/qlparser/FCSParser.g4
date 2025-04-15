@@ -41,7 +41,7 @@ query_simple
 
 quantifier
     : (Q_ONE_OR_MORE | Q_ZERO_OR_MORE | Q_ZERO_OR_ONE |
-        ( L_CURLY_BRACKET
+        (L_CURLY_BRACKET
             (INTEGER |
              INTEGER? Q_COMMA INTEGER |
              INTEGER Q_COMMA INTEGER?) R_CURLY_BRACKET))
