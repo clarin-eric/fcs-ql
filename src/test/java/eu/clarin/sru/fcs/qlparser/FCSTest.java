@@ -1,9 +1,12 @@
 package eu.clarin.sru.fcs.qlparser;
 
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.tree.*;
 import java.io.FileInputStream;
 import java.io.InputStream;
+
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
  * A test runner for queries in files or on STDIN.
@@ -11,7 +14,7 @@ import java.io.InputStream;
  */
 public class FCSTest {
     public static void main(String[] args) throws Exception {
-        String inputFile = null; 
+        String inputFile = null;
         if (args.length > 0) {
             inputFile = args[0];
         }
@@ -20,9 +23,9 @@ public class FCSTest {
             is = new FileInputStream(inputFile);
         }
         CharStream input = CharStreams.fromStream(is);
-        FCSLexer lexer = new FCSLexer(input); 
-        CommonTokenStream tokens = new CommonTokenStream(lexer); 
-        FCSParser parser = new FCSParser(tokens); 
+        FCSLexer lexer = new FCSLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        FCSParser parser = new FCSParser(tokens);
         ParseTree tree = parser.query();
         System.out.println(tree.toStringTree(parser));
     }
