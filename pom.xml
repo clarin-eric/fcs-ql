@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>CLARIN-FCS Core 2.0 query language parser</name>
-    <description>An implementation of CLARIN-FCS Core 2.0 query language grammar and parser.</description>
+    <description>An implementation of CLARIN-FCS Core 2.0 query language (FCS-QL) and LexFCS extension lexical query language (LexCQL) grammar and parser.</description>
     <organization>
         <name>CLARIN ERIC</name>
         <url>https://clarin.eu/</url>
