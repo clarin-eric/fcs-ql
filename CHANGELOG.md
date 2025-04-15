@@ -1,5 +1,18 @@
 # Changelog
 
+# [2.0.0](https://github.com/clarin-eric/fcs-simple-endpoint/releases/tag/FCS-QL-2.0.0) - 2025-04-16
+
+- Changes:
+  - **Breaking**: Added missing regular expresion special characters `]` and `}` to FCS-QL lexer grammar
+  - **Breaking**: Fix FCS-QL parser grammer to account for nestable "expression-not" and "expression-group" rules
+  - **Breaking**: Update precedences of `expression*` rules, "not" is highest, followed by "and" than "or" (more intuitive for user probably)
+  - Suppress `maven-javadoc-plugin`'s `doclint` warnings about missing comments
+  - Code cleanup (imports)
+
+- Dependencies:
+  - Move `org.slf4j` to `test` scope
+  - Move `org.slf4j:slf4j-log4j12` to `org.slf4j:slf4j-reload4j`
+
 # [1.0.0](https://github.com/clarin-eric/fcs-simple-endpoint/releases/tag/FCS-QL-1.0.0) - 2025-04-04
 
 NOTE: Make this an official release!
