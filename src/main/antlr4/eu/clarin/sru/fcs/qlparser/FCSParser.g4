@@ -80,14 +80,13 @@ expression
 expression_or
     : (expression_basic | expression_group | expression_not | expression_and) 
         (OR (expression_basic | expression_group | expression_not | expression_and))+ 
-    ;    
+    ;
 
 
 expression_and
     : (expression_basic | expression_group | expression_not)
-        (AND (expression_basic | expression_group | expression_not))+ 
-    ;    
-
+        (AND (expression_basic | expression_group | expression_not))+
+    ;
 
 
 expression_group
@@ -107,7 +106,7 @@ expression_basic
 
 attribute
     : (qualifier COLON)? identifier
-    ; 
+    ;
 
 
 qualifier
