@@ -6,6 +6,9 @@ Create a JAR with dependencies:
 
 ```bash
 mvn antlr4:antlr4 compiler:compile package
+
+# or
+mvn clean package
 ```
 
 ## Testing
