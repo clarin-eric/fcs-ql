@@ -1,5 +1,10 @@
 # Changelog
 
+# [2.0.1](https://github.com/clarin-eric/fcs-simple-endpoint/releases/tag/FCS-QL-2.0.1) - 2025-04-16
+
+- Bug fixes:
+  - Fix `NOT` (`!`) precedence, repeated `!` expressions should immediately nest together and have highest precedence
+
 # [2.0.0](https://github.com/clarin-eric/fcs-simple-endpoint/releases/tag/FCS-QL-2.0.0) - 2025-04-16
 
 - Changes:
