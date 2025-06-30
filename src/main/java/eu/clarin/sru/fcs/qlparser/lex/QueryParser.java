@@ -18,24 +18,18 @@ package eu.clarin.sru.fcs.qlparser.lex;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 
-import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.clarin.sru.fcs.qlparser.AbstractQueryParser;
 import eu.clarin.sru.fcs.qlparser.QueryParserException;
-import eu.clarin.sru.fcs.qlparser.lex.LexLexer;
-import eu.clarin.sru.fcs.qlparser.lex.LexParser;
 import eu.clarin.sru.fcs.qlparser.lex.LexParser.Boolean_modifiedContext;
 import eu.clarin.sru.fcs.qlparser.lex.LexParser.Boolean_queryContext;
 import eu.clarin.sru.fcs.qlparser.lex.LexParser.IndexContext;
@@ -49,12 +43,11 @@ import eu.clarin.sru.fcs.qlparser.lex.LexParser.Relation_modifiedContext;
 import eu.clarin.sru.fcs.qlparser.lex.LexParser.Search_clauseContext;
 import eu.clarin.sru.fcs.qlparser.lex.LexParser.Search_termContext;
 import eu.clarin.sru.fcs.qlparser.lex.LexParser.SubqueryContext;
-import eu.clarin.sru.fcs.qlparser.lex.LexParserBaseVisitor;
 
 /**
  * A LexCQL query parser that produces LexCQL expression trees.
  */
-public class QueryParser {
+public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, QueryVisitor> {
     private static final int DEFAULT_INITIAL_STACK_SIZE = 32;
     private static final Logger logger = LoggerFactory.getLogger(ExpressionTreeBuilder.class);
 
@@ -71,8 +64,9 @@ public class QueryParser {
      * @return a LexCQL expression tree
      * @throws QueryParserException if an error occurred
      */
+    @Override
     public QueryNode parse(String query) throws QueryParserException {
-        final ErrorListener errorListener = new ErrorListener(query);
+        final ErrorListener errorListener = new ErrorListener(logger, query);
         try {
             CharStream input = CharStreams.fromString(query);
             LexLexer lexer = new LexLexer(input);
@@ -471,75 +465,6 @@ public class QueryParser {
         }
 
         return sb.toString();
-    }
-
-    private static final class ErrorListener extends BaseErrorListener {
-        private final String query;
-        private List<String> errors = null;
-
-        private ErrorListener(String query) {
-            this.query = query;
-        }
-
-        @Override
-        public void syntaxError(Recognizer<?, ?> recognizer,
-                Object offendingSymbol, int line, int charPositionInLine,
-                String msg, RecognitionException e) {
-            if (errors == null) {
-                errors = new ArrayList<>();
-            }
-
-            /*
-             * FIXME: additional information of error should not be logged
-             * but added to the list of errors; that list probably needs
-             * to be enhanced to store supplementary information
-             * Furthermore, a sophisticated errorlist implementation could
-             * also be used by the QueryVistor to add addition query error
-             * information
-             */
-            if (logger.isDebugEnabled()) {
-                if (offendingSymbol instanceof Token) {
-                    final Token t = (Token) offendingSymbol;
-                    int pos = t.getStartIndex();
-                    if (pos != -1) {
-                        StringBuilder x = new StringBuilder();
-                        while (pos-- > 0) {
-                            x.append(" ");
-                        }
-                        x.append("^- ").append(msg);
-                        logger.debug("query: {}", query);
-                        logger.debug("       {}", x.toString());
-                    }
-                }
-            }
-
-            errors.add(msg);
-        }
-
-        public boolean hasErrors() {
-            return (errors != null) && !errors.isEmpty();
-        }
-
-        public List<String> getErrors() {
-            if (errors != null) {
-                return errors;
-            } else {
-                return Collections.emptyList();
-            }
-        }
-    }
-
-    @SuppressWarnings("serial")
-    private static final class ExpressionTreeBuilderException
-            extends RuntimeException {
-        private ExpressionTreeBuilderException(String message,
-                Throwable cause) {
-            super(message, cause);
-        }
-
-        private ExpressionTreeBuilderException(String message) {
-            this(message, null);
-        }
     }
 
 } // class QueryParser

@@ -25,22 +25,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.clarin.sru.fcs.qlparser.AbstractQueryParser;
 import eu.clarin.sru.fcs.qlparser.QueryParserException;
-import eu.clarin.sru.fcs.qlparser.fcs.FCSLexer;
-import eu.clarin.sru.fcs.qlparser.fcs.FCSParser;
 import eu.clarin.sru.fcs.qlparser.fcs.FCSParser.AttributeContext;
 import eu.clarin.sru.fcs.qlparser.fcs.FCSParser.Expression_andContext;
 import eu.clarin.sru.fcs.qlparser.fcs.FCSParser.Expression_basicContext;
@@ -63,13 +59,12 @@ import eu.clarin.sru.fcs.qlparser.fcs.FCSParser.Regexp_flagContext;
 import eu.clarin.sru.fcs.qlparser.fcs.FCSParser.Regexp_patternContext;
 import eu.clarin.sru.fcs.qlparser.fcs.FCSParser.Within_partContext;
 import eu.clarin.sru.fcs.qlparser.fcs.FCSParser.Within_part_simpleContext;
-import eu.clarin.sru.fcs.qlparser.fcs.FCSParserBaseVisitor;
 
 
 /**
  * A FCS-QL query parser that produces FCS-QL expression trees.
  */
-public class QueryParser {
+public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, QueryVisitor> {
     private static final int[] REP_ZERO_OR_MORE =
             new int[] { 0, QueryNode.OCCURS_UNBOUNDED };
     private static final int[] REP_ONE_OR_MORE =
@@ -136,8 +131,9 @@ public class QueryParser {
      * @throws QueryParserException
      *             if an error occurred
      */
+    @Override
     public QueryNode parse(String query) throws QueryParserException {
-        final ErrorListener errorListener = new ErrorListener(query);
+        final ErrorListener errorListener = new ErrorListener(logger, query);
         try {
             CharStream input = CharStreams.fromString(query);
             FCSLexer lexer = new FCSLexer(input);
@@ -977,82 +973,6 @@ public class QueryParser {
             throw new ExpressionTreeBuilderException(
                     "invalud hex character: " +
                             new String(Character.toChars(c)));
-        }
-    }
-
-
-    private static final class ErrorListener extends BaseErrorListener {
-        private final String query;
-        private List<String> errors = null;
-
-
-        private ErrorListener(String query) {
-            this.query = query;
-        }
-
-
-        @Override
-        public void syntaxError(Recognizer<?, ?> recognizer,
-                Object offendingSymbol, int line, int charPositionInLine,
-                String msg, RecognitionException e) {
-            if (errors == null) {
-                errors = new ArrayList<>();
-            }
-
-            /*
-             * FIXME: additional information of error should not be logged
-             * but added to the list of errors; that list probably needs
-             * to be enhanced to store supplementary information
-             * Furthermore, a sophisticated errorlist implementation could
-             * also be used by the QueryVistor to add addition query error
-             * information
-             */
-            if (logger.isDebugEnabled()) {
-                if (offendingSymbol instanceof Token) {
-                    final Token t = (Token) offendingSymbol;
-                    int pos = t.getStartIndex();
-                    if (pos != -1) {
-                        StringBuilder x = new StringBuilder();
-                        while (pos-- > 0) {
-                            x.append(" ");
-                        }
-                        x.append("^- ").append(msg);
-                        logger.debug("query: {}", query);
-                        logger.debug("       {}", x.toString());
-                    }
-                }
-            }
-
-            errors.add(msg);
-        }
-
-
-        public boolean hasErrors() {
-            return (errors != null) && !errors.isEmpty();
-        }
-
-
-        public List<String> getErrors() {
-            if (errors != null) {
-                return errors;
-            } else {
-                return Collections.emptyList();
-            }
-        }
-    }
-
-
-    @SuppressWarnings("serial")
-    private static final class ExpressionTreeBuilderException
-            extends RuntimeException {
-        private ExpressionTreeBuilderException(String message,
-                Throwable cause) {
-            super(message, cause);
-        }
-
-
-        private ExpressionTreeBuilderException(String message) {
-            this(message, null);
         }
     }
 

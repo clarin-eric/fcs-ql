@@ -16,11 +16,12 @@
  */
 package eu.clarin.sru.fcs.qlparser.fcs;
 
+import eu.clarin.sru.fcs.qlparser.AbstractQueryNode.AbstractQueryVisitor;
 
 /**
  * Interface implementing a Visitor pattern for FCS-QL expression trees.
  */
-public interface QueryVisitor {
+public interface QueryVisitor extends AbstractQueryVisitor {
     /**
      * Visit a <em>segment</em> query node.
      *

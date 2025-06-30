@@ -16,10 +16,12 @@
  */
 package eu.clarin.sru.fcs.qlparser.lex;
 
+import eu.clarin.sru.fcs.qlparser.AbstractQueryNode.AbstractQueryVisitor;
+
 /**
  * Interface implementing a Visitor pattern for LexCQL expression trees.
  */
-public interface QueryVisitor {
+public interface QueryVisitor extends AbstractQueryVisitor {
     /**
      * Visit a <em>search_clause_group</em> query node.
      *

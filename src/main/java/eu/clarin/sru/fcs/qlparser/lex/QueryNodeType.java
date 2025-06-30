@@ -16,17 +16,19 @@
  */
 package eu.clarin.sru.fcs.qlparser.lex;
 
+import eu.clarin.sru.fcs.qlparser.AbstractQueryNode.AbstractQueryNodeType;
+
 /**
  * Node types of LexCQL expression tree nodes.
  */
-public enum QueryNodeType {
+public enum QueryNodeType implements AbstractQueryNodeType {
     /**
      * search clause group (either nested search clause groups or search clauses,
      * with binary boolean relation)
      */
     SEARCH_CLAUSE_GROUP {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "SearchClauseGroup";
         }
     },
@@ -35,7 +37,7 @@ public enum QueryNodeType {
      */
     SUBQUERY {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "Subquery";
         }
     },
@@ -44,7 +46,7 @@ public enum QueryNodeType {
      */
     SEARCH_CLAUSE {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "SearchClause";
         }
     },
@@ -53,7 +55,7 @@ public enum QueryNodeType {
      */
     RELATION {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "Relation";
         }
     },
@@ -62,11 +64,9 @@ public enum QueryNodeType {
      */
     MODIFIER {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "Modifier";
         }
     };
-
-    abstract String toDisplayString();
 
 } // enum QueryNodeType

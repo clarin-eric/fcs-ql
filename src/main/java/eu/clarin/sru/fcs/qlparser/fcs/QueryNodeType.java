@@ -16,17 +16,18 @@
  */
 package eu.clarin.sru.fcs.qlparser.fcs;
 
+import eu.clarin.sru.fcs.qlparser.AbstractQueryNode.AbstractQueryNodeType;
 
 /**
  * Node types of FCS-QL expression tree nodes.
  */
-public enum QueryNodeType {
+public enum QueryNodeType implements AbstractQueryNodeType {
     /**
      * segment query
      */
     QUERY_SEGMENT {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "QuerySegment";
         }
     },
@@ -35,7 +36,7 @@ public enum QueryNodeType {
      */
     QUERY_GROUP {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "QueryGroup";
         }
     },
@@ -44,7 +45,7 @@ public enum QueryNodeType {
      */
     QUERY_SEQUENCE {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "QuerySequence";
         }
     },
@@ -53,7 +54,7 @@ public enum QueryNodeType {
      */
     QUERY_DISJUNCTION {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "QueryDisjunction";
         }
     },
@@ -62,7 +63,7 @@ public enum QueryNodeType {
      */
     QUERY_WITH_WITHIN {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "QueryWithWithin";
         }
     },
@@ -71,7 +72,7 @@ public enum QueryNodeType {
      */
     EXPRESSION {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "Expression";
         }
     },
@@ -80,7 +81,7 @@ public enum QueryNodeType {
      */
     EXPRESSION_WILDCARD {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "Wildcard";
         }
     },
@@ -89,7 +90,7 @@ public enum QueryNodeType {
      */
     EXPRESSION_GROUP {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "Group";
         }
     },
@@ -98,7 +99,7 @@ public enum QueryNodeType {
      */
     EXPRESSION_OR {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "Or";
         }
     },
@@ -107,7 +108,7 @@ public enum QueryNodeType {
      */
     EXPRESSION_AND {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "And";
         }
     },
@@ -116,7 +117,7 @@ public enum QueryNodeType {
      */
     EXPRESSION_NOT {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "Not";
         }
     },
@@ -125,11 +126,9 @@ public enum QueryNodeType {
      */
     SIMPLE_WITHIN {
         @Override
-        String toDisplayString() {
+        public String toDisplayString() {
             return "SimpleWithin";
         }
     };
-
-    abstract String toDisplayString();
 
 } // enum QueryNodeType
