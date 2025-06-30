@@ -1,5 +1,26 @@
 # Changelog
 
+# [3.0.0](https://github.com/clarin-eric/fcs-simple-endpoint/releases/tag/FCS-QL-2.0.1) - 2025-06-30
+
+- Changes:
+  - **Breaking**: Moved `QueryParser` and related query tree classes from [`fcs-simple-endpoint`](https://github.com/clarin-eric/fcs-simple-endpoint) here to decouple from FCS endpoints and to allow reusability.
+
+    Because of this move, all imports in FCS endpoints that evaluate queries need to change:
+    - `eu.clarin.sru.server.fcs.parser.*` → `eu.clarin.sru.fcs.qlparser.fcs.*` (FCS-QL)
+    - `eu.clarin.sru.server.fcs.parser_lex.*` → `eu.clarin.sru.fcs.qlparser.lex.*` (LexCQL)
+
+    The internal ANTLR4 lexers and parsers were also moved into their own namespaces:
+    - `eu.clarin.sru.fcs.qlparser.*` → `eu.clarin.sru.fcs.qlparser.fcs.*`  
+      (for FCS-QL, e.g. `FCSLexer`, `FCSParser`, `FCSParserBaseVisitor`)
+    - `eu.clarin.sru.fcs.qlparser.*` → `eu.clarin.sru.fcs.qlparser.lex.*`  
+      (for LexCQL, e.g. `LexLexer`, `LexParser`, `LexParserBaseVisitor`)
+
+    The CQL parser remains in [`fcs-sru-server`](https://github.com/clarin-eric/fcs-sru-server) (external, non-CLARIN dependency `org.z3950.zing:cql-java:1.13`) as there is no shared code base.
+  - Slight change to bild process: ANTLR4 generated source files will be placed into [`src/main/java`](src/main/java/) instead of default `target/generated-sources/antlr4` and are now version controlled. This will avoid code editor errors due to non-existing files but requires synchronisation and recreation of ANTLR4 files when grammar files are changed. E.g., run `mvn antlr4:antlr4` to generate those files. A default build with `mvn clean package` will also recreate the ANTLR4 files from the grammar files (and might lead to errors when grammar files have breaking changes)!
+
+- Dependencies:
+  - `org.slf4j` back to `compile` (default) scope
+
 # [2.0.1](https://github.com/clarin-eric/fcs-simple-endpoint/releases/tag/FCS-QL-2.0.1) - 2025-04-16
 
 - Bug fixes:

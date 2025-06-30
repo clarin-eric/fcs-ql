@@ -1,5 +1,9 @@
 # FCS-QL and LexCQL Parser and Utilities for FCS Core v2.0
 
+This library contains the [ANTLR4](https://www.antlr.org/) grammar files for the `FCS-QL` and `LexCQL` query languages used in FCS Core 2.0 and the LexFCS extension.
+
+Generated Lexer and Parser classes for both query languages as well as the intermediary query tree classes for use in FCS Endpoints are also included.
+
 ## Building
 
 Create a JAR with dependencies:
