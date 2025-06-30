@@ -19,7 +19,8 @@
   - Slight change to bild process: ANTLR4 generated source files will be placed into [`src/main/java`](src/main/java/) instead of default `target/generated-sources/antlr4` and are now version controlled. This will avoid code editor errors due to non-existing files but requires synchronisation and recreation of ANTLR4 files when grammar files are changed. E.g., run `mvn antlr4:antlr4` to generate those files. A default build with `mvn clean package` will also recreate the ANTLR4 files from the grammar files (and might lead to errors when grammar files have breaking changes)!
 
 - Dependencies:
-  - `org.slf4j` back to `compile` (default) scope
+  - Change `org.slf4j` back to `compile` (default) scope
+  - Remove `org.apache.maven.plugin-testing:maven-plugin-testing-harness` test dependency (unused)
 
 # [2.0.1](https://github.com/clarin-eric/fcs-simple-endpoint/releases/tag/FCS-QL-2.0.1) - 2025-04-16
 
