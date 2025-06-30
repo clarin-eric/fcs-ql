@@ -1,4 +1,4 @@
-package eu.clarin.sru.fcs.qlparser;
+package eu.clarin.sru.fcs.qlparser.fcs;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
