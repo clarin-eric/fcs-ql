@@ -16,19 +16,17 @@
  */
 package eu.clarin.sru.fcs.qlparser.lex;
 
+import java.util.Arrays;
+
 /**
  * A LexCQL expression tree search_clausse_group node.
  */
 public class SearchClauseGroup extends QueryNode {
-    private final QueryNode leftChild;
     private final RBoolean r_boolean;
-    private final QueryNode rightChild;
 
     SearchClauseGroup(QueryNode leftChild, RBoolean r_boolean, QueryNode rightChild) {
-        super(QueryNodeType.SEARCH_CLAUSE_GROUP);
-        this.leftChild = leftChild;
+        super(QueryNodeType.SEARCH_CLAUSE_GROUP, Arrays.asList(leftChild, rightChild));
         this.r_boolean = r_boolean;
-        this.rightChild = rightChild;
     }
 
     /**
@@ -37,7 +35,7 @@ public class SearchClauseGroup extends QueryNode {
      * @return the left child (search clause or group)
      */
     public QueryNode getLeftChild() {
-        return leftChild;
+        return children.get(0);
     }
 
     /**
@@ -46,7 +44,7 @@ public class SearchClauseGroup extends QueryNode {
      * @return the right child (search clause or group)
      */
     public QueryNode getRightChild() {
-        return rightChild;
+        return children.get(1);
     }
 
     /**
@@ -78,7 +76,7 @@ public class SearchClauseGroup extends QueryNode {
         sb.append('(');
         sb.append(nodeType.toDisplayString());
         sb.append(' ');
-        sb.append(leftChild).append(' ').append(r_boolean).append(' ').append(rightChild);
+        sb.append(children.get(0)).append(' ').append(r_boolean).append(' ').append(children.get(1));
         sb.append(')');
         if (location != null) {
             sb.append('@').append(location.getStart()).append(':').append(location.getStop());

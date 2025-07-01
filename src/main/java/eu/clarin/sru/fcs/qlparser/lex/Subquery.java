@@ -20,12 +20,10 @@ package eu.clarin.sru.fcs.qlparser.lex;
  * A LexCQL expression tree search_clausse_group node.
  */
 public class Subquery extends QueryNode {
-    private final QueryNode child;
     private final boolean inParentheses;
 
     Subquery(QueryNode child, boolean inParentheses) {
-        super(QueryNodeType.SUBQUERY);
-        this.child = child;
+        super(QueryNodeType.SUBQUERY, child);
         this.inParentheses = inParentheses;
     }
 
@@ -35,7 +33,7 @@ public class Subquery extends QueryNode {
      * @return the right child
      */
     public QueryNode getChild() {
-        return child;
+        return children.get(0);
     }
 
     /**
@@ -57,7 +55,7 @@ public class Subquery extends QueryNode {
         if (inParentheses) {
             sb.append("\"(\" ");
         }
-        sb.append(child);
+        sb.append(children.get(0));
         if (inParentheses) {
             sb.append(" \")\"");
         }

@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class Relation extends QueryNode {
     private final String relation;
-    private final List<Modifier> modifiers;
+    private final List<Modifier> modifiers;  // TODO: store into children?
 
     /**
      * Constructor.
