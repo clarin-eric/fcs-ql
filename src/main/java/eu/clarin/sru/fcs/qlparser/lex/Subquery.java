@@ -62,6 +62,9 @@ public class Subquery extends QueryNode {
             sb.append(" \")\"");
         }
         sb.append(')');
+        if (location != null) {
+            sb.append('@').append(location.getStart()).append(':').append(location.getStop());
+        }
         return sb.toString();
     }
 

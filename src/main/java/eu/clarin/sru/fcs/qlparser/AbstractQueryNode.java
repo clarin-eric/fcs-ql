@@ -22,10 +22,12 @@ package eu.clarin.sru.fcs.qlparser;
 import java.util.Collections;
 import java.util.List;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
 public abstract class AbstractQueryNode<Q extends AbstractQueryNode<Q, T, V>, T extends AbstractQueryNode.AbstractQueryNodeType, V extends AbstractQueryNode.AbstractQueryVisitor> {
 
     /**
-     * Node types of query expression tree nodes.
+     * Interface for node types of query expression tree nodes.
      */
     public static interface AbstractQueryNodeType {
         /* EMPTY */
@@ -42,9 +44,52 @@ public abstract class AbstractQueryNode<Q extends AbstractQueryNode<Q, T, V>, T 
     }
 
 
+    /**
+     * Source information wrapping start and stop offsets in the query text for a
+     * query node.
+     */
+    public static class SourceLocation {
+        final int start;
+        final int stop;
+
+
+        public SourceLocation(int start, int stop) {
+            this.start = start;
+            this.stop = stop;
+        }
+
+
+        public static SourceLocation fromParserRuleContext(ParserRuleContext ctx) {
+            if (ctx == null) {
+                return null;
+            }
+
+            // start and stop tokens might be null (maybe due to errors)
+            if (ctx.getStart() == null || ctx.getStop() == null) {
+                return null;
+            }
+
+            int start = ctx.getStart().getStartIndex();
+            int stop = ctx.getStop().getStopIndex();
+            return new SourceLocation(start, stop);
+        }
+
+
+        public int getStart() {
+            return start;
+        }
+
+
+        public int getStop() {
+            return stop;
+        }
+    }
+
+
     protected final T nodeType;
     protected final List<Q> children;
     protected Q parent;
+    protected SourceLocation location;
 
 
     /**
@@ -247,6 +292,30 @@ public abstract class AbstractQueryNode<Q extends AbstractQueryNode<Q, T, V>, T 
     }
 
 
+    /**
+     * Get source location information about start/stop offsets for this query node
+     * in the query text content.
+     *
+     * @return the location information with the span convering the query node in
+     *         the query
+     */
+    public SourceLocation getLocation() {
+        return location;
+    }
+
+
+    /**
+     * Set source location information.
+     *
+     * @param location
+     *            the location information with the span convering the query 
+     *            node in the query
+     */
+    public final void setLocation(SourceLocation location) {
+        this.location = location;
+    }
+
+
     public abstract void accept(V visitor);
 
 
@@ -260,6 +329,9 @@ public abstract class AbstractQueryNode<Q extends AbstractQueryNode<Q, T, V>, T 
             }
         }
         sb.append(')');
+        if (location != null) {
+            sb.append('@').append(location.getStart()).append(':').append(location.getStop());
+        }
         return sb.toString();
     }
 

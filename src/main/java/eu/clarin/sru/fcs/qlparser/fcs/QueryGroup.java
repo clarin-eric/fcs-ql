@@ -101,6 +101,9 @@ public class QueryGroup extends QueryNode {
         }
         sb.append(children.get(0));
         sb.append(')');
+        if (location != null) {
+            sb.append('@').append(location.getStart()).append(':').append(location.getStop());
+        }
         return sb.toString();
     }
 

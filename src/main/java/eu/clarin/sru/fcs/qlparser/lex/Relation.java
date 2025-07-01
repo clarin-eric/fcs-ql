@@ -73,6 +73,9 @@ public class Relation extends QueryNode {
             }
         }
         sb.append(')');
+        if (location != null) {
+            sb.append('@').append(location.getStart()).append(':').append(location.getStop());
+        }
         return sb.toString();
     }
 

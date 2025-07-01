@@ -31,6 +31,8 @@ import org.slf4j.Logger;
 
 public abstract class AbstractQueryParser<Q extends AbstractQueryNode<Q, T, V>, T extends AbstractQueryNode.AbstractQueryNodeType, V extends AbstractQueryNode.AbstractQueryVisitor> {
 
+    protected boolean enableSourceLocations = false;
+
     /**
      * Parse query.
      *
@@ -41,6 +43,28 @@ public abstract class AbstractQueryParser<Q extends AbstractQueryNode<Q, T, V>, 
      *             if an error occurred
      */
     public abstract Q parse(String query) throws QueryParserException;
+
+
+    /**
+     * Whether source locations are computed for each query node.
+     * 
+     * @return <code>true</code> if source locations are added, <code>false</code>
+     *         otherwise
+     */
+    public boolean isEnableSourceLocations() {
+        return enableSourceLocations;
+    }
+
+
+    /**
+     * Set whether source locations for query nodes should be computed.
+     * 
+     * @param addNodeLocations <code>true</code> if source locations are to be
+     *                         added, <code>false</code> otherwise
+     */
+    public void setEnableSourceLocations(boolean addNodeLocations) {
+        this.enableSourceLocations = addNodeLocations;
+    }
 
 
     protected static final class ErrorListener extends BaseErrorListener {

@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.clarin.sru.fcs.qlparser.AbstractQueryParser;
 import eu.clarin.sru.fcs.qlparser.QueryParserException;
+import eu.clarin.sru.fcs.qlparser.AbstractQueryNode.SourceLocation;
 import eu.clarin.sru.fcs.qlparser.fcs.FCSParser.AttributeContext;
 import eu.clarin.sru.fcs.qlparser.fcs.FCSParser.Expression_andContext;
 import eu.clarin.sru.fcs.qlparser.fcs.FCSParser.Expression_basicContext;
@@ -223,7 +224,11 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
             if (w_ctx != null) {
                 QueryNode within = (QueryNode) stack.pop();
                 QueryNode query  = (QueryNode) stack.pop();
-                stack.push(new QueryWithWithin(query, within));
+                QueryNode node = new QueryWithWithin(query, within);
+                if (enableSourceLocations) {
+                    node.setLocation(SourceLocation.fromParserRuleContext(ctx));
+                }
+                stack.push(node);
             }
             if (logger.isTraceEnabled()) {
                 logger.trace("visitQuery/exit: stack={}", stack);
@@ -263,7 +268,11 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
                 while (stack.size() > pos) {
                     items.add(0, (QueryNode) stack.pop());
                 }
-                stack.push(new QueryDisjunction(items));
+                QueryNode node = new QueryDisjunction(items);
+                if (enableSourceLocations) {
+                    node.setLocation(SourceLocation.fromParserRuleContext(ctx));
+                }
+                stack.push(node);
             } else {
                 throw new ExpressionTreeBuilderException(
                         "visitQuery_disjunction is empty!");
@@ -273,7 +282,6 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
             }
             return null;
         }
-
 
 
         @Override
@@ -291,7 +299,11 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
                 while (stack.size() > pos) {
                     items.add(0, (QueryNode) stack.pop());
                 }
-                stack.push(new QuerySequence(items));
+                QueryNode node = new QuerySequence(items);
+                if (enableSourceLocations) {
+                    node.setLocation(SourceLocation.fromParserRuleContext(ctx));
+                }
+                stack.push(node);
             } else {
                 throw new ExpressionTreeBuilderException(
                         "visitQuery_sequence is empty!");
@@ -329,7 +341,11 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
             }
 
             QueryNode content = (QueryNode) stack.pop();
-            stack.push(new QueryGroup(content, min, max));
+            QueryNode node = new QueryGroup(content, min, max);
+            if (enableSourceLocations) {
+                node.setLocation(SourceLocation.fromParserRuleContext(ctx));
+            }
+            stack.push(node);
             if (logger.isTraceEnabled()) {
                 logger.trace("visitQuery_group/exit: stack={}", stack);
             }
@@ -363,7 +379,11 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
             }
 
             QueryNode expression = (QueryNode) stack.pop();
-            stack.push(new QuerySegment(expression, min, max));
+            QueryNode node = new QuerySegment(expression, min, max);
+            if (enableSourceLocations) {
+                node.setLocation(SourceLocation.fromParserRuleContext(ctx));
+            }
+            stack.push(node);
             if (logger.isTraceEnabled()) {
                 logger.trace("visitQuery_simple/exit: stack={}", stack);
             }
@@ -393,6 +413,9 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
 
             Expression exp = new Expression(qualifier, identifier, operator,
                     regex_value, regex_flags);
+            if (enableSourceLocations) {
+                exp.setLocation(SourceLocation.fromParserRuleContext(ctx));
+            }
             stack.push(exp);
             if (logger.isTraceEnabled()) {
                 logger.trace("visitQuery_implicit/exit: stack={}", stack);
@@ -415,7 +438,11 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
              * '[' and ']' thus we are dealing with a wildcard segment
              */
             if (ctx.getChildCount() == 2) {
-                stack.push(new ExpressionWildcard());
+                QueryNode node = new ExpressionWildcard();
+                if (enableSourceLocations) {
+                    node.setLocation(SourceLocation.fromParserRuleContext(ctx));
+                }
+                stack.push(node);
             } else {
                 super.visitQuery_segment(ctx);
             }
@@ -457,6 +484,9 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
 
             Expression exp = new Expression(qualifier, identifer, operator,
                     regex_value, regex_flags);
+            if (enableSourceLocations) {
+                exp.setLocation(SourceLocation.fromParserRuleContext(ctx));
+            }
             stack.push(exp);
             if (logger.isTraceEnabled()) {
                 logger.trace("visitExpression_basic/exit: stack={}", stack);
@@ -476,7 +506,11 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
             super.visitExpression_not(ctx);
 
             QueryNode expression = (QueryNode) stack.pop();
-            stack.push(new ExpressionNot(expression));
+            QueryNode node = new ExpressionNot(expression);
+            if (enableSourceLocations) {
+                node.setLocation(SourceLocation.fromParserRuleContext(ctx));
+            }
+            stack.push(node);
             if (logger.isTraceEnabled()) {
                 logger.trace("visitExpression_not/exit: stack={}", stack);
             }
@@ -495,7 +529,11 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
             super.visitExpression_group(ctx);
 
             QueryNode expression = (QueryNode) stack.pop();
-            stack.push(new ExpressionGroup(expression));
+            QueryNode node = new ExpressionGroup(expression);
+            if (enableSourceLocations) {
+                node.setLocation(SourceLocation.fromParserRuleContext(ctx));
+            }
+            stack.push(node);
             if (logger.isTraceEnabled()) {
                 logger.trace("visitExpression_group/exit: stack={}", stack);
             }
@@ -518,7 +556,11 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
                 while (stack.size() > pos) {
                     children.add(0, (QueryNode) stack.pop());
                 }
-                stack.push(new ExpressionOr(children));
+                QueryNode node = new ExpressionOr(children);
+                if (enableSourceLocations) {
+                    node.setLocation(SourceLocation.fromParserRuleContext(ctx));
+                }
+                stack.push(node);
             } else {
                 throw new ExpressionTreeBuilderException(
                         "visitExpression_or is empty!");
@@ -545,7 +587,11 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
                 while (stack.size() > pos) {
                     children.add(0, (QueryNode) stack.pop());
                 }
-                stack.push(new ExpressionAnd(children));
+                QueryNode node = new ExpressionAnd(children);
+                if (enableSourceLocations) {
+                    node.setLocation(SourceLocation.fromParserRuleContext(ctx));
+                }
+                stack.push(node);
             } else {
                 throw new ExpressionTreeBuilderException(
                         "visitExpression_and is empty!");
@@ -681,7 +727,7 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
                 scope = SimpleWithin.Scope.UTTERANCE;
             } else if ("paragraph".equals(s) || "p".equals(s)) {
                 scope = SimpleWithin.Scope.PARAGRAPH;
-            } else if ("turn".equals(s)|| "t".equals(s)) {
+            } else if ("turn".equals(s) || "t".equals(s)) {
                 scope = SimpleWithin.Scope.TURN;
             } else if ("text".equals(s)) {
                 scope = SimpleWithin.Scope.TEXT;
@@ -691,7 +737,11 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
                 throw new ExpressionTreeBuilderException(
                         "invalid scope for simple 'within' clause: " + s);
             }
-            stack.push(new SimpleWithin(scope));
+            QueryNode node = new SimpleWithin(scope);
+            if (enableSourceLocations) {
+                node.setLocation(SourceLocation.fromParserRuleContext(ctx));
+            }
+            stack.push(node);
             if (logger.isTraceEnabled()) {
                 logger.trace("Within_part_simpleContext/exit: stack={}", stack);
             }

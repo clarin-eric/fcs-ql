@@ -93,6 +93,9 @@ public class SearchClause extends QueryNode {
         }
         sb.append(search_term);
         sb.append(')');
+        if (location != null) {
+            sb.append('@').append(location.getStart()).append(':').append(location.getStop());
+        }
         return sb.toString();
     }
 

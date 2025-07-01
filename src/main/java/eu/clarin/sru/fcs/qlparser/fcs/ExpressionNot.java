@@ -41,6 +41,9 @@ public class ExpressionNot extends QueryNode {
             .append(' ')
             .append(children.get(0))
             .append(')');
+        if (location != null) {
+            sb.append('@').append(location.getStart()).append(':').append(location.getStop());
+        }
         return sb.toString();
     }
 

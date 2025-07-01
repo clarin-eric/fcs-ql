@@ -68,16 +68,19 @@ public class Modifier extends QueryNode {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("(");
+        sb.append('(');
         sb.append(nodeType.toDisplayString());
-        sb.append(" ");
-        sb.append("/");
+        sb.append(' ');
+        sb.append('/');
         sb.append(name);
         if (relation != null && value != null) {
-            sb.append(" ").append(relation);
-            sb.append(" ").append(value);
+            sb.append(' ').append(relation);
+            sb.append(' ').append(value);
         }
-        sb.append(")");
+        sb.append(')');
+        if (location != null) {
+            sb.append('@').append(location.getStart()).append(':').append(location.getStop());
+        }
         return sb.toString();
     }
 

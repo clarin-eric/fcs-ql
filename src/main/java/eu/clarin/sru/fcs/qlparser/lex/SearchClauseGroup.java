@@ -80,6 +80,9 @@ public class SearchClauseGroup extends QueryNode {
         sb.append(' ');
         sb.append(leftChild).append(' ').append(r_boolean).append(' ').append(rightChild);
         sb.append(')');
+        if (location != null) {
+            sb.append('@').append(location.getStart()).append(':').append(location.getStop());
+        }
         return sb.toString();
     }
 

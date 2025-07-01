@@ -214,49 +214,53 @@ public class Expression extends QueryNode {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("(");
+        sb.append('(');
         sb.append(nodeType.toDisplayString());
-        sb.append(" ");
+        sb.append(' ');
         if (qualifier != null) {
-            sb.append(qualifier).append(":");
+            sb.append(qualifier).append(':');
         }
         sb.append(identifier);
-        sb.append(" ");
+        sb.append(' ');
         sb.append(operator.toDisplayString());
-        sb.append(" \"");
+        sb.append(' ');
+        sb.append('"');
         for (int i = 0; i < regex.length(); i++) {
             char ch = regex.charAt(i);
             switch (ch) {
             case '\n':
-                sb.append("\\n");
+                sb.append('\n');
                 break;
             case '\r':
-                sb.append("\\r");
+                sb.append('\r');
                 break;
             case '\t':
-                sb.append("\\t");
+                sb.append('\t');
                 break;
             default:
                 sb.append(ch);
             }
         }
-        sb.append("\"");
+        sb.append('"');
         if (regex_flags != null) {
-            sb.append("/");
+            sb.append('/');
             if (regex_flags.contains(RegexFlag.CASE_INSENSITIVE)) {
-                sb.append("i");
+                sb.append('i');
             }
             if (regex_flags.contains(RegexFlag.CASE_SENSITIVE)) {
-                sb.append("I");
+                sb.append('I');
             }
             if (regex_flags.contains(RegexFlag.LITERAL_MATCHING)) {
-                sb.append("l");
+                sb.append('l');
             }
             if (regex_flags.contains(RegexFlag.IGNORE_DIACRITICS)) {
-                sb.append("d");
+                sb.append('d');
             }
         }
-        sb.append(")");
+        sb.append(')');
+        if (location != null) {
+            sb.append('@').append(location.getStart()).append(':').append(location.getStop());
+        }
         return sb.toString();
     }
 

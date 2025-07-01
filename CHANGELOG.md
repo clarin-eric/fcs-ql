@@ -17,6 +17,7 @@
 
     The CQL parser remains in [`fcs-sru-server`](https://github.com/clarin-eric/fcs-sru-server) (external, non-CLARIN dependency `org.z3950.zing:cql-java:1.13`) as there is no shared code base.
   - Slight change to bild process: ANTLR4 generated source files will be placed into [`src/main/java`](src/main/java/) instead of default `target/generated-sources/antlr4` and are now version controlled. This will avoid code editor errors due to non-existing files but requires synchronisation and recreation of ANTLR4 files when grammar files are changed. E.g., run `mvn antlr4:antlr4` to generate those files. A default build with `mvn clean package` will also recreate the ANTLR4 files from the grammar files (and might lead to errors when grammar files have breaking changes)!
+  - Add source locations (start and stop offsets in query text) to query nodes. (Disabled by default. See `AbstractQueryParser.[is|set]EnableSourceLocations()`)
 
 - Dependencies:
   - Change `org.slf4j` back to `compile` (default) scope

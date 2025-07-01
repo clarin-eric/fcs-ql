@@ -28,6 +28,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.clarin.sru.fcs.qlparser.AbstractQueryNode.SourceLocation;
 import eu.clarin.sru.fcs.qlparser.AbstractQueryParser;
 import eu.clarin.sru.fcs.qlparser.QueryParserException;
 import eu.clarin.sru.fcs.qlparser.lex.LexParser.Boolean_modifiedContext;
@@ -176,6 +177,9 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
                         RBoolean rBoolean = (RBoolean) children.remove(0);
                         QueryNode other = (QueryNode) children.remove(0);
                         node = new SearchClauseGroup(node, rBoolean, other);
+                        if (enableSourceLocations) {
+                            node.setLocation(SourceLocation.fromParserRuleContext(ctx));
+                        }
                     }
                     if (!children.isEmpty()) {
                         throw new ExpressionTreeBuilderException(
@@ -206,7 +210,11 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
             super.visitSubquery(ctx);
             if (ctx.boolean_query() != null) {
                 QueryNode node = (QueryNode) stack.pop();
-                stack.push(new Subquery(node, true));
+                QueryNode sqNode = new Subquery(node, true);
+                if (enableSourceLocations) {
+                    sqNode.setLocation(SourceLocation.fromParserRuleContext(ctx));
+                }
+                stack.push(sqNode);
             } else if (ctx.search_clause() != null) {
                 SearchClause searchClause = (SearchClause) stack.pop();
                 stack.push(searchClause);
@@ -268,7 +276,11 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
                 index = (String) stack.pop();
             }
 
-            stack.push(new SearchClause(index, relation, searchTerm));
+            QueryNode node = new SearchClause(index, relation, searchTerm);
+            if (enableSourceLocations) {
+                node.setLocation(SourceLocation.fromParserRuleContext(ctx));
+            }
+            stack.push(node);
 
             if (logger.isTraceEnabled()) {
                 logger.trace("visitSearch_clause/exit: stack={}", stack);
@@ -338,7 +350,11 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
                 modifiers = (List<Modifier>) stack.pop();
             }
             String name = (String) stack.pop();
-            stack.push(new Relation(name, modifiers));
+            QueryNode node = new Relation(name, modifiers);
+            if (enableSourceLocations) {
+                node.setLocation(SourceLocation.fromParserRuleContext(ctx));
+            }
+            stack.push(node);
 
             if (logger.isTraceEnabled()) {
                 logger.trace("visitRelation_modified/exit: stack={}", stack);
@@ -411,7 +427,11 @@ public class QueryParser extends AbstractQueryParser<QueryNode, QueryNodeType, Q
                 value = r_ctx.modifier_value().SIMPLE_STRING().getSymbol().getText();
             }
 
-            stack.push(new Modifier(name, relation, value));
+            QueryNode node = new Modifier(name, relation, value);
+            if (enableSourceLocations) {
+                node.setLocation(SourceLocation.fromParserRuleContext(ctx));
+            }
+            stack.push(node);
 
             if (logger.isTraceEnabled()) {
                 logger.trace("visitModifier/exit: stack={}", stack);
