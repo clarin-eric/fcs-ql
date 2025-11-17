@@ -1,6 +1,6 @@
 # Changelog
 
-# [3.0.0](https://github.com/clarin-eric/fcs-simple-endpoint/releases/tag/FCS-QL-2.0.1) - 2025-06-30
+# [3.0.0](https://github.com/clarin-eric/fcs-simple-endpoint/releases/tag/FCS-QL-3.0.0) - 2025-11-17
 
 - Changes:
   - **Breaking**: Moved `QueryParser` and related query tree classes from [`fcs-simple-endpoint`](https://github.com/clarin-eric/fcs-simple-endpoint) here to decouple from FCS endpoints and to allow reusability.
@@ -8,6 +8,7 @@
     Because of this move, all imports in FCS endpoints that evaluate queries need to change:
     - `eu.clarin.sru.server.fcs.parser.*` → `eu.clarin.sru.fcs.qlparser.fcs.*` (FCS-QL)
     - `eu.clarin.sru.server.fcs.parser_lex.*` → `eu.clarin.sru.fcs.qlparser.lex.*` (LexCQL)
+    - `eu.clarin.sru.server.fcs.parser.QueryParserException` → `eu.clarin.sru.fcs.qlparser.QueryParserException`
 
     The internal ANTLR4 lexers and parsers were also moved into their own namespaces:
     - `eu.clarin.sru.fcs.qlparser.*` → `eu.clarin.sru.fcs.qlparser.fcs.*`  
