@@ -70,7 +70,8 @@ public abstract class AbstractQueryNode<Q extends AbstractQueryNode<Q, T, V>, T 
             }
 
             int start = ctx.getStart().getStartIndex();
-            int stop = ctx.getStop().getStopIndex();
+            int stop = ctx.getStop().getStopIndex() + 1;
+            // NOTE: stop+1 for Java string indexing
             return new SourceLocation(start, stop);
         }
 
